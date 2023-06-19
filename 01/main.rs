@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 
+// https://adventofcode.com/2022/day/1
 fn main() {
     let args: Vec<String> = env::args().collect();
     match args.len() {
