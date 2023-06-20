@@ -11,8 +11,6 @@ fn main() {
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
                 let file = file.split("\r\n");
-                    
-                }
             } else {
                 println!("Invalid file name: {}", &args[1]);
             }
