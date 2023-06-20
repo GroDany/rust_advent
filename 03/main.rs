@@ -10,8 +10,18 @@ fn main() {
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
-                let file = file.split("\n");
+                let _file = file.split("\n");
+                let mut sum = 0;
 
+                for line in _file {
+                    let len = line.len();
+
+                    let mut s = String::from(&line[len / 2..]);
+
+                    sum += find_value(&line[..len / 2], &mut s);
+                }
+
+                println!("Solution is: {}", sum);
             } else {
                 println!("Invalid file name: {}", &args[1]);
             }
@@ -22,17 +32,13 @@ fn main() {
     }
 }
 
-fn calc(val: &str) -> Option<i32> {
-    match val {
-        "A X" => { Some(3) }
-        "A Y" => { Some(4) }
-        "A Z" => { Some(8) }
-        "B X" => { Some(1) }
-        "B Y" => { Some(5) }
-        "B Z" => { Some(9) }
-        "C X" => { Some(2) }
-        "C Y" => { Some(6) }
-        "C Z" => { Some(7) }
-        _ => { None }
+fn find_value(a: &str, b: &mut str) -> i32 {
+    for character in a.chars() {
+        if let Some(c) = b.chars().find(|c| *c == character) {
+            let offset: i32 = if (c as i32) < 97 { 38 } else { 96 };
+            return (c as i32) - offset;
+        }
     }
+
+    return 0;
 }
