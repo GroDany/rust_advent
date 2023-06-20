@@ -6,7 +6,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     match args.len() {
         1 => {
-            println!("My name is 'match_args'. Try passing the input file path!");
+            println!("Try passing the input file path!");
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
