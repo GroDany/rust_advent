@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::env;
 use std::fs;
 
@@ -10,15 +11,28 @@ fn main() {
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
-                let _file = file.split("\n");
+                let file: Vec<&str> = file.split("\r\n").collect();
                 let mut sum = 0;
 
-                for line in _file {
-                    let len = line.len();
+                for i in (0..file.len()).step_by(3) {
+                    if file[i].is_empty() {
+                        break;
+                    }
+                    let set0: HashSet<char> = file[i].chars().collect();
+                    let set1: HashSet<char> = file[i + 1].chars().collect();
+                    let set2: HashSet<char> = file[i + 2].chars().collect();
 
-                    let mut s = String::from(&line[len / 2..]);
-
-                    sum += find_value(&line[..len / 2], &mut s);
+                    let set = set0
+                        .iter()
+                        .filter(|k| set1.contains(k))
+                        .filter(|k| set2.contains(k));
+                    for character in set.enumerate() {
+                        sum += if (*character.1 as i32) < 97 {
+                            (*character.1 as i32) - 38
+                        } else {
+                            (*character.1 as i32) - 96
+                        };
+                    }
                 }
 
                 println!("Solution is: {}", sum);
@@ -32,13 +46,3 @@ fn main() {
     }
 }
 
-fn find_value(a: &str, b: &mut str) -> i32 {
-    for character in a.chars() {
-        if let Some(c) = b.chars().find(|c| *c == character) {
-            let offset: i32 = if (c as i32) < 97 { 38 } else { 96 };
-            return (c as i32) - offset;
-        }
-    }
-
-    return 0;
-}
