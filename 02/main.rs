@@ -25,7 +25,6 @@ fn main() {
                         }
                     }
                 }
-                
             } else {
                 println!("Invalid file name: {}", &args[1]);
             }
@@ -38,15 +37,15 @@ fn main() {
 
 fn calc(val: &str) -> Option<i32> {
     match val {
-        "A X" => { Some(3) }
-        "A Y" => { Some(4) }
-        "A Z" => { Some(8) }
-        "B X" => { Some(1) }
-        "B Y" => { Some(5) }
-        "B Z" => { Some(9) }
-        "C X" => { Some(2) }
-        "C Y" => { Some(6) }
-        "C Z" => { Some(7) }
-        _ => { None }
+        "A X" => Some(3),
+        "A Y" => Some(4),
+        "A Z" => Some(8),
+        "B X" => Some(1),
+        "B Y" => Some(5),
+        "B Z" => Some(9),
+        "C X" => Some(2),
+        "C Y" => Some(6),
+        "C Z" => Some(7),
+        _ => None,
     }
 }
