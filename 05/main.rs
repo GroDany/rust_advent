@@ -14,9 +14,10 @@ fn main() {
                 let boxes = file.next().unwrap();
                 // let moves = file.next().unwrap();
 
-                let boxes = boxes.split("\r\n");
+                let boxes = boxes.rsplit("\r\n");
                 for row in boxes {
-                    println!("{}", row);
+                    row.chars().collect::<Vec<char>>().chunks(4).for_each(|chunk| println!("{:?}", chunk));
+                    
                 }
             } else {
                 println!("Invalid file name: {}", &args[1]);
