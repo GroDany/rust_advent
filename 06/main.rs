@@ -1,5 +1,6 @@
 use std::env;
 use std::fs;
+use std::collections::HashSet;
 
 // https://adventofcode.com/2022/day/5
 fn main() {
@@ -10,8 +11,12 @@ fn main() {
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
-                for w in file.chars().collect::<Vec<char>>().windows(4) {
-                    dbg!(w);
+                for w in file.chars().collect::<Vec<char>>().windows(4).enumerate() {
+                    let mut set: HashSet<char> = HashSet::new();
+                    if w.1.into_iter().all(move |c| set.insert(*c)) {
+                        println!("{}", w.0 + 4);
+                        return ();
+                    }
                 }
             } else {
                 println!("Invalid file name: {}", &args[1]);
