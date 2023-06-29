@@ -12,7 +12,7 @@ fn main() {
             if let Ok(file) = fs::read_to_string(&args[1]) {
                 let mut file = file.split("\r\n\r\n");
                 let boxes = file.next().unwrap();
-                // let moves = file.next().unwrap();
+                let moves = file.next().unwrap();
 
                 let boxes = boxes.rsplit("\r\n");
                 let mut items = Vec::<char>::new();
@@ -44,8 +44,25 @@ fn main() {
                         }
                     }
                 }
+                println!("{:#?}", &stacks);
 
-                println!("{:?}", stacks);
+                let moves = moves.split("\r\n");
+                for m in moves {
+                    if !m.is_empty() {
+                        let args = m.split(" ").collect::<Vec<&str>>();
+                        let i: usize = args[1].parse().unwrap();
+                        let from: usize = args[3].parse::<usize>().unwrap() - 1;
+                        let to: usize = args[5].parse::<usize>().unwrap() - 1;
+
+                        let new_len = &stacks[from].len() - i;
+                        let mut c: Vec<char> = stacks[from].split_off(new_len);
+                        stacks[to].append(&mut c);
+                    }
+                }
+
+                for s in stacks {
+                    println!("{}", s.last().unwrap());
+                }
             } else {
                 println!("Invalid file name: {}", &args[1]);
             }
