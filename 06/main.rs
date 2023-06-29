@@ -11,10 +11,10 @@ fn main() {
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
-                for w in file.chars().collect::<Vec<char>>().windows(4).enumerate() {
+                for w in file.chars().collect::<Vec<char>>().windows(14).enumerate() {
                     let mut set: HashSet<char> = HashSet::new();
                     if w.1.into_iter().all(move |c| set.insert(*c)) {
-                        println!("{}", w.0 + 4);
+                        println!("{}", w.0 + 14);
                         return ();
                     }
                 }
