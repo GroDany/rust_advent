@@ -83,6 +83,92 @@ impl Forest {
         }
         (count + 2 * (self.w + self.h) - 4).try_into().unwrap()
     }
+
+    fn scenic_score_up(&self, idx: usize) -> u32 {
+        let mut res = 0;
+        let mut n = self.w;
+        let bytes = self.file.as_bytes();
+
+        while n <= idx {
+            res += 1;
+            if bytes[idx - n] >= bytes[idx] {
+                return res;
+            }
+            n += self.w;
+        }
+        res
+    }
+
+    fn scenic_score_down(&self, idx: usize) -> u32 {
+        let mut res = 0;
+        let mut n = idx + self.w;
+        let bytes = self.file.as_bytes();
+
+        while n < self.w * self.h {
+            res += 1;
+            if bytes[n] >= bytes[idx] {
+                return res;
+            }
+            n += self.w;
+        }
+        res
+    }
+
+    fn scenic_score_left(&self, idx: usize) -> u32 {
+        let mut n = idx - 1;
+        let bytes = self.file.as_bytes();
+        let mut res = 0;
+
+        loop {
+            res += 1;
+            if bytes[n] >= bytes[idx] {
+                return res;
+            }
+            if n % self.w == 0 { break; }
+            n -= 1;
+        }
+        res
+    }
+
+    fn scenic_score_right(&self, idx: usize) -> u32 {
+        let bytes = self.file.as_bytes();
+        let x = self.w - (idx % self.w);
+        let mut res = 0;
+
+        for n in 1..x {
+            res += 1;
+            if bytes[idx + n] >= bytes[idx] {
+                return res;
+            }
+        }
+        res
+    }
+
+    fn scenic_score(&self, idx: usize) -> u32 {
+        let u = self.scenic_score_up(idx);
+        let d = self.scenic_score_down(idx);
+        let l = self.scenic_score_left(idx);
+        let r = self.scenic_score_right(idx);
+        u * d * l * r
+    }
+
+    fn find_max_score(&self) -> u32 {
+        let mut idx = self.w + 1;
+        let mut max = 0;
+
+        while idx < self.w * (self.h - 1) - 1 {
+            for _ in 0..self.w - 2 {
+                let x = self.scenic_score(idx);
+                if x > max {
+                    max = x;
+                }
+                idx += 1;
+            }
+            idx += 2;
+        }
+        max
+    }
+
 }
 
 fn main() {
@@ -102,7 +188,7 @@ fn main() {
                     h: h,
                     file: file,
                 };
-                let res = forest.count_visible_trees();
+                let res = forest.find_max_score();
                 println!("Solution is: {}", res);
             } else {
                 println!("Invalid file name: {}", &args[1]);
