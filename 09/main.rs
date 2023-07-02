@@ -22,6 +22,25 @@ fn move_tail(head: &(i32, i32), tail: &mut (i32, i32), pos: &mut HashSet<(i32, i
     }
 }
 
+fn move_rope(rope: &mut [(i32, i32); 10], pos: &mut HashSet<(i32, i32)>) {
+    for i in 1..10 {
+        let diff = (rope[i - 1].0 - rope[i].0, rope[i - 1].1 - rope[i].1);
+        if diff.0 == 2 || diff.0 == -2 {
+            rope[i].0 += diff.0 / 2;
+            if diff.1 == 1 || diff.1 == -1 {
+                rope[i].1 += diff.1;
+            }
+        }
+        if diff.1 == 2 || diff.1 == -2 {
+            rope[i].1 += diff.1 / 2;
+            if diff.0 == 1 || diff.0 == -1 {
+                rope[i].0 += diff.0;
+            }
+        }  
+    }
+    pos.insert((rope[9].0, rope[9].1));
+}
+
 // https://adventofcode.com/2022/day/9
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -31,8 +50,7 @@ fn main() {
         }
         2 => {
             if let Ok(file) = fs::read_to_string(&args[1]) {
-                let mut head: (i32, i32) = (0, 0);
-                let mut tail: (i32, i32) = (0, 0);
+                let mut rope: [(i32, i32); 10] = [(0, 0); 10];
                 let file = file.split("\n");
                 let mut pos: HashSet<(i32, i32)> = HashSet::new();
                 pos.insert((0, 0));
@@ -43,32 +61,32 @@ fn main() {
                     match line[0] {
                         "U" => {
                             for _ in 0..n {
-                                head.1 += 1;
-                                move_tail(&head, &mut tail, &mut pos);
+                                rope[0].1 += 1;
+                                move_rope(&mut rope, &mut pos);
                             }
                         },
                         "D" => {
                             for _ in 0..n {
-                                head.1 -= 1;
-                                move_tail(&head, &mut tail, &mut pos);
+                                rope[0].1 -= 1;
+                                move_rope(&mut rope, &mut pos);
                             }
                         },
                         "L" => {
                             for _ in 0..n {
-                                head.0 -= 1;
-                                move_tail(&head, &mut tail, &mut pos);
+                                rope[0].0 -= 1;
+                                 move_rope(&mut rope, &mut pos);
                             }
                         },
                         "R" => {
                             for _ in 0..n {
-                                head.0 += 1;
-                                move_tail(&head, &mut tail, &mut pos);
+                                rope[0].0 += 1;
+                                move_rope(&mut rope, &mut pos);
                             }
                         },
                         _ => {},
                     }
                 }
-                dbg!(&pos.len());
+                println!("Solution id {}", pos.len());
             } else {
                 println!("Invalid file name: {}", &args[1]);
             }
