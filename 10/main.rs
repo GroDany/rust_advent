@@ -27,7 +27,6 @@ fn main() {
                             cache = line[1].parse::<i32>().unwrap();
                             if cycle % 40 == 20 {
                                 strength += x * cycle;
-                                // println!("{} {}: {}", x, cycle, x * cycle);
                             }
                             cycle += 1;
                         },
@@ -35,7 +34,6 @@ fn main() {
                     }
                     if cycle % 40 == 20 {
                         strength += x * cycle;
-                        // println!("{} {}: {}", x, cycle, x * cycle);
                     }
                     cycle += 1;
                 }
