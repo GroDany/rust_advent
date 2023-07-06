@@ -14,7 +14,6 @@ fn main() {
                 let mut cycle = 1;
                 let mut x = 1;
                 let mut cache = 0;
-                let mut strength = 0;
 
                 for line in file {
                     if cache != 0 {
@@ -25,15 +24,15 @@ fn main() {
                     match line[0] {
                         "addx" => {
                             cache = line[1].parse::<i32>().unwrap();
-                            if cycle % 40 == 20 {
-                                strength += x * cycle;
+                            if cycle % 40 == 0 {
+                                print!("\n");
                             }
                             cycle += 1;
                         },
                         _ => cache = 0,
                     }
-                    if cycle % 40 == 20 {
-                        strength += x * cycle;
+                    if cycle % 40 == 0 {
+                        print!("\n");
                     }
                     cycle += 1;
                 }
